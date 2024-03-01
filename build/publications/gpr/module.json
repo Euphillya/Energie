@@ -1,0 +1,60 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "fr.euphyllia",
+    "module": "energie",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "energie-1.0.0.jar",
+          "url": "energie-1.0.0.jar",
+          "size": 19906,
+          "sha512": "fded99b2db458b4a3000b1605380620d0489e2ccdbf3602f1f8a6290858f45b70ab2cadb80e4d0955c486c58003f960f73b0c4582847497d44b1d898ca58fed6",
+          "sha256": "9690361cdcb4495058840edd5e2795d3ef3d94a493f0e4566e91398b84d43cbb",
+          "sha1": "077367b19a8159654cb222e5040d2295e1bbb387",
+          "md5": "03c513ccc986ba17913af5545421c9fa"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "energie-1.0.0.jar",
+          "url": "energie-1.0.0.jar",
+          "size": 19906,
+          "sha512": "fded99b2db458b4a3000b1605380620d0489e2ccdbf3602f1f8a6290858f45b70ab2cadb80e4d0955c486c58003f960f73b0c4582847497d44b1d898ca58fed6",
+          "sha256": "9690361cdcb4495058840edd5e2795d3ef3d94a493f0e4566e91398b84d43cbb",
+          "sha1": "077367b19a8159654cb222e5040d2295e1bbb387",
+          "md5": "03c513ccc986ba17913af5545421c9fa"
+        }
+      ]
+    }
+  ]
+}
