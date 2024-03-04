@@ -418,16 +418,15 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
-        switch (chunkOrLoc) {
-            case Location location ->
-                    this.runAtFixedRate(schedulerType, location, callBack, initialDelayTicks, periodTicks);
-            case MultipleRecords.WorldChunk worldChunk ->
-                    this.runAtFixedRate(schedulerType, worldChunk, callBack, initialDelayTicks, periodTicks);
-            case Chunk chunk -> {
-                MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
-                this.runAtFixedRate(schedulerType, worldChunk, callBack, initialDelayTicks, periodTicks);
-            }
-            case null, default -> this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
+        if (chunkOrLoc instanceof Location location) {
+            this.runAtFixedRate(schedulerType, location, callBack, initialDelayTicks, periodTicks);
+        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk worldChunk) {
+            this.runAtFixedRate(schedulerType, worldChunk, callBack, initialDelayTicks, periodTicks);
+        } else if (chunkOrLoc instanceof Chunk chunk) {
+            MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
+            this.runAtFixedRate(schedulerType, worldChunk, callBack, initialDelayTicks, periodTicks);
+        } else {
+            this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
         }
     }
 
@@ -447,16 +446,15 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long delayTicks, SchedulerCallBack callBack) {
-        switch (chunkOrLoc) {
-            case Location location ->
-                    this.runDelayed(schedulerType, location, callBack, delayTicks);
-            case MultipleRecords.WorldChunk worldChunk ->
-                    this.runDelayed(schedulerType, worldChunk, callBack, delayTicks);
-            case Chunk chunk -> {
-                MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
-                this.runDelayed(schedulerType, worldChunk, callBack, delayTicks);
-            }
-            case null, default -> this.runDelayed(schedulerType, callBack, delayTicks);
+        if (chunkOrLoc instanceof Location location) {
+            this.runDelayed(schedulerType, location, callBack, delayTicks);
+        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk worldChunk) {
+            this.runDelayed(schedulerType, worldChunk, callBack, delayTicks);
+        } else if (chunkOrLoc instanceof Chunk chunk) {
+            MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
+            this.runDelayed(schedulerType, worldChunk, callBack, delayTicks);
+        } else {
+            this.runDelayed(schedulerType, callBack, delayTicks);
         }
     }
 
@@ -476,16 +474,15 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, SchedulerCallBack callBack) {
-        switch (chunkOrLoc) {
-            case Location location ->
-                    this.scheduleSyncDelayed(schedulerType, location, callBack);
-            case MultipleRecords.WorldChunk worldChunk ->
-                    this.scheduleSyncDelayed(schedulerType, worldChunk, callBack);
-            case Chunk chunk -> {
-                MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
-                this.scheduleSyncDelayed(schedulerType, worldChunk, callBack);
-            }
-            case null, default -> this.scheduleSyncDelayed(schedulerType, callBack);
+        if (chunkOrLoc instanceof Location location) {
+            this.scheduleSyncDelayed(schedulerType, location, callBack);
+        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk worldChunk) {
+            this.scheduleSyncDelayed(schedulerType, worldChunk, callBack);
+        } else if (chunkOrLoc instanceof Chunk chunk) {
+            MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
+            this.scheduleSyncDelayed(schedulerType, worldChunk, callBack);
+        } else {
+            this.scheduleSyncDelayed(schedulerType, callBack);
         }
     }
 
