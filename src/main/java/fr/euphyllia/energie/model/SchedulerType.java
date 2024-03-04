@@ -7,5 +7,6 @@ public enum SchedulerType {
     REGION,
     @Deprecated
     ENTITY,
-    ASYNC
+    ASYNC,
+    SYNC
 }
