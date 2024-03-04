@@ -1,5 +1,11 @@
 package fr.euphyllia.energie.model;
 
 public enum SchedulerType {
-    GLOBAL, REGION, ENTITY, ASYNC
+    @Deprecated
+    GLOBAL,
+    @Deprecated
+    REGION,
+    @Deprecated
+    ENTITY,
+    ASYNC
 }
