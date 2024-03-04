@@ -28,10 +28,14 @@ Energie energie = new Energie(this.plugin);
 Scheduler minecraftScheduler = energie.getScheduler(SchedulerSoft.MINECRAFT);
 // Example getGlobalRegionScheduler
 minecraftScheduler.runTask(SchedulerType.SYNC, task -> {
-    
+    // code
 });
-// Example getRegionScheduler or EntityScheduler
-minecraftScheduler.runTask(SchedulerType.SYNC, (location/MultiRecords.WorldChunk/Entity), task -> {
-
+// Example getRegionScheduler
+minecraftScheduler.runTask(SchedulerType.SYNC, (location/MultiRecords.WorldChunk), task -> {
+    // code
 });
+// Example EntityScheduler
+minecraftScheduler.runTask(SchedulerType.SYNC, entity, task -> {
+    // code
+}, retired);
 ```
