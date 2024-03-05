@@ -8,10 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class ExecutorsScheduler implements Scheduler {
 
@@ -22,6 +19,11 @@ public class ExecutorsScheduler implements Scheduler {
         this.plugin = pluginBukkit;
     }
 
+
+    @Override
+    public @Nullable <T> Future<T> callSyncMethod(SchedulerCallBack callBack) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {

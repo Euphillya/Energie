@@ -8,6 +8,8 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.Future;
+
 public class LegacyScheduler implements Scheduler {
     private final Plugin plugin;
 
@@ -15,6 +17,13 @@ public class LegacyScheduler implements Scheduler {
         this.plugin = pluginBukkit;
     }
 
+    @Override
+    public @Nullable <T> Future<T> callSyncMethod(SchedulerCallBack callBack) {
+        return Bukkit.getScheduler().callSyncMethod(this.plugin, () -> {
+            callBack.run(null);
+            return null;
+        });
+    }
 
     @Override
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {

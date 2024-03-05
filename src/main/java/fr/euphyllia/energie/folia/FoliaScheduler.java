@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class FoliaScheduler implements Scheduler {
@@ -23,6 +24,14 @@ public class FoliaScheduler implements Scheduler {
         this.plugin = pluginBukkit;
     }
 
+
+    @Override
+    public @Nullable <T> Future<T> callSyncMethod(SchedulerCallBack callBack) {
+        Bukkit.getGlobalRegionScheduler().execute(this.plugin, () -> {
+            callBack.run(null);
+        });
+        return null;
+    }
 
     @Override
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {

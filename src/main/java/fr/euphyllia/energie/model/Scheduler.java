@@ -6,7 +6,11 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.Future;
+
 public interface Scheduler {
+
+    <T> @Nullable Future<T> callSyncMethod(SchedulerCallBack callBack);
 
     void runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks);
 
