@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -239,185 +238,136 @@ public class FoliaScheduler implements Scheduler {
 
     @Override
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
-                this.runTask(schedulerType, schedulerTask -> {
-                    completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                    callBack.run(schedulerTask);
-                });
+                this.runTask(schedulerType, callBack);
             } else {
                 Bukkit.getGlobalRegionScheduler().execute(this.plugin, () -> {
-                    completableFuture.complete(0);
                     callBack.run(null);
                 });
             }
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
-                this.runTask(schedulerType, worldChunk, schedulerTask -> {
-                    completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                    callBack.run(schedulerTask);
-                });
+                this.runTask(schedulerType, worldChunk, callBack::run);
             } else {
                 Bukkit.getRegionScheduler().execute(this.plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), () -> {
-                    completableFuture.complete(0);
                     callBack.run(null);
                 });
             }
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
-                this.runTask(schedulerType, location, schedulerTask -> {
-                    completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                    callBack.run(schedulerTask);
-                });
+                this.runTask(schedulerType, location, callBack);
             } else {
                 Bukkit.getRegionScheduler().execute(this.plugin, location, () -> {
-                    completableFuture.complete(0);
                     callBack.run(null);
                 });
             }
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delay) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
-            this.runDelayed(schedulerType, schedulerTask -> {
-                completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                callBack.run(schedulerTask);
-            }, delay);
+            this.runDelayed(schedulerType, callBack, delay);
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long delay) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
-            this.runDelayed(schedulerType, worldChunk, schedulerTask -> {
-                completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                callBack.run(schedulerTask);
-            }, delay);
+            this.runDelayed(schedulerType, worldChunk, callBack, delay);
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long delay) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
-            this.runDelayed(schedulerType, location, schedulerTask -> {
-                completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                callBack.run(schedulerTask);
-            }, delay);
+            this.runDelayed(schedulerType, location, callBack, delay);
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
-
     }
 
     @Override
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delay) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
-                this.runDelayed(schedulerType, entity, schedulerTask -> {
-                    completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                    callBack.run(schedulerTask);
-                }, retired, delay);
+                this.runDelayed(schedulerType, entity, callBack, retired, delay);
             } else {
                 entity.getScheduler().execute(this.plugin, () -> {
-                    completableFuture.complete(0);
                     callBack.run(null);
                 }, retired, delay);
             }
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncRepeating(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delay, long period) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
-            this.runAtFixedRate(schedulerType, schedulerTask -> {
-                completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                callBack.run(schedulerTask);
-            }, delay, period);
+            this.runAtFixedRate(schedulerType, callBack, delay, period);
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncRepeating(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long delay, long period) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
-            this.runAtFixedRate(schedulerType, worldChunk, schedulerTask -> {
-                completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                callBack.run(schedulerTask);
-            }, delay, period);
+            this.runAtFixedRate(schedulerType, worldChunk, callBack, delay, period);
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncRepeating(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long delay, long period) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
-            this.runAtFixedRate(schedulerType, location, schedulerTask -> {
-                completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                callBack.run(schedulerTask);
-            }, delay, period);
+            this.runAtFixedRate(schedulerType, location, callBack, delay, period);
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override
     public int scheduleSyncRepeating(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delay, long period) {
-        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
         try {
-            this.runAtFixedRate(schedulerType, entity, schedulerTask -> {
-                completableFuture.complete(schedulerTask != null ? schedulerTask.getTaskId() : 0);
-                callBack.run(schedulerTask);
-            }, retired, delay, period);
+            this.runAtFixedRate(schedulerType, entity, callBack, retired, delay, period);
+            return 0;
         } catch (Exception ignored) {
-            completableFuture.complete(-1);
+            return -1;
         }
-        return completableFuture.join();
     }
 
     @Override @Deprecated
