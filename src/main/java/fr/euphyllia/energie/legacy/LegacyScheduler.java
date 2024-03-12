@@ -5,10 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class LegacyScheduler implements Scheduler {
     private final Plugin plugin;
@@ -26,91 +28,117 @@ public class LegacyScheduler implements Scheduler {
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+        AtomicReference<BukkitTask> bukkitTaskRef = new AtomicReference<>(null);
         if (schedulerType.equals(SchedulerType.ASYNC)) {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, task -> {
-                SchedulerTaskInter schedulerTask = new LegacySchedulerTask(task);
-                callBack.run(schedulerTask);
-            }, initialDelayTicks, periodTicks);
+            bukkitTaskRef.set(Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    SchedulerTaskInter schedulerTask = new LegacySchedulerTask(bukkitTaskRef.get());
+                    callBack.run(schedulerTask);
+                }
+            }, initialDelayTicks, periodTicks));
         } else {
-            Bukkit.getScheduler().runTaskTimer(this.plugin, task -> {
-                SchedulerTaskInter schedulerTask = new LegacySchedulerTask(task);
-                callBack.run(schedulerTask);
-            }, initialDelayTicks, periodTicks);
+            bukkitTaskRef.set(Bukkit.getScheduler().runTaskTimer(this.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    SchedulerTaskInter schedulerTask = new LegacySchedulerTask(bukkitTaskRef.get());
+                    callBack.run(schedulerTask);
+                }
+            }, initialDelayTicks, periodTicks));
         }
+        return new LegacySchedulerTask(bukkitTaskRef.get());
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
-        this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+        return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
-        this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+        return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
-        this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
+        return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delayTicks) {
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delayTicks) {
+        AtomicReference<BukkitTask> bukkitTaskRef = new AtomicReference<>(null);
         if (schedulerType.equals(SchedulerType.ASYNC)) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, task -> {
-                SchedulerTaskInter schedulerTask = new LegacySchedulerTask(task);
-                callBack.run(schedulerTask);
-            }, delayTicks);
+            bukkitTaskRef.set(Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    SchedulerTaskInter schedulerTask = new LegacySchedulerTask(bukkitTaskRef.get());
+                    callBack.run(schedulerTask);
+                }
+            }, delayTicks));
         } else {
-            Bukkit.getScheduler().runTaskLater(this.plugin, task -> {
-                SchedulerTaskInter schedulerTask = new LegacySchedulerTask(task);
-                callBack.run(schedulerTask);
-            }, delayTicks);
+            bukkitTaskRef.set(Bukkit.getScheduler().runTaskLater(this.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    SchedulerTaskInter schedulerTask = new LegacySchedulerTask(bukkitTaskRef.get());
+                    callBack.run(schedulerTask);
+                }
+            }, delayTicks));
         }
+        return new LegacySchedulerTask(bukkitTaskRef.get());
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long delayTicks) {
-        this.runDelayed(schedulerType, callBack, delayTicks);
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long delayTicks) {
+        return this.runDelayed(schedulerType, callBack, delayTicks);
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long delayTicks) {
-        this.runDelayed(schedulerType, callBack, delayTicks);
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long delayTicks) {
+        return this.runDelayed(schedulerType, callBack, delayTicks);
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delayTicks) {
-        this.runDelayed(schedulerType, callBack, delayTicks);
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delayTicks) {
+        return this.runDelayed(schedulerType, callBack, delayTicks);
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
+        AtomicReference<BukkitTask> bukkitTaskRef = new AtomicReference<>(null);
         if (schedulerType.equals(SchedulerType.ASYNC)) {
-            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                callBack.run(null);
-            });
+            bukkitTaskRef.set(Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    SchedulerTaskInter schedulerTask = new LegacySchedulerTask(bukkitTaskRef.get());
+                    callBack.run(schedulerTask);
+                }
+            }));
         } else {
-            Bukkit.getScheduler().runTask(this.plugin, () -> {
-                callBack.run(null);
-            });
+            bukkitTaskRef.set(Bukkit.getScheduler().runTask(this.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    SchedulerTaskInter schedulerTask = new LegacySchedulerTask(bukkitTaskRef.get());
+                    callBack.run(schedulerTask);
+                }
+            }));
         }
+        return new LegacySchedulerTask(bukkitTaskRef.get());
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack) {
-        this.runTask(schedulerType, callBack);
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack) {
+        return this.runTask(schedulerType, callBack);
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack) {
-        this.runTask(schedulerType, callBack);
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack) {
+        return this.runTask(schedulerType, callBack);
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired) {
-        this.runTask(schedulerType, callBack);
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired) {
+        return this.runTask(schedulerType, callBack);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class ExecutorsScheduler implements Scheduler {
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
         if (!schedulerType.equals(SchedulerType.ASYNC)) {
             throw new UnsupportedOperationException();
         }
@@ -36,25 +36,26 @@ public class ExecutorsScheduler implements Scheduler {
             mapSchedulerTask.put(executorsScheduler.getTaskId(), executorsScheduler);
             callBack.run(executorsScheduler);
         }, initialDelayTicks * 50, periodTicks * 50, TimeUnit.MILLISECONDS);
+        return new ExecutorsSchedulerTask(plugin, executorService);
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+        return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+        return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
     }
 
     @Override
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
+        return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delayTicks) {
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delayTicks) {
         if (!schedulerType.equals(SchedulerType.ASYNC)) {
             throw new UnsupportedOperationException();
         }
@@ -64,25 +65,26 @@ public class ExecutorsScheduler implements Scheduler {
             mapSchedulerTask.put(executorsScheduler.getTaskId(), executorsScheduler);
             callBack.run(executorsScheduler);
         }, delayTicks * 50, TimeUnit.MILLISECONDS);
+        return new ExecutorsSchedulerTask(plugin, executorService);
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long delayTicks) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long delayTicks) {
+        return this.runDelayed(schedulerType, callBack, delayTicks);
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long delayTicks) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long delayTicks) {
+        return this.runDelayed(schedulerType, callBack, delayTicks);
     }
 
     @Override
-    public void runDelayed(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delayTicks) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delayTicks) {
+        return this.runDelayed(schedulerType, callBack, delayTicks);
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
         if (!schedulerType.equals(SchedulerType.ASYNC)) {
             throw new UnsupportedOperationException();
         }
@@ -92,21 +94,22 @@ public class ExecutorsScheduler implements Scheduler {
             mapSchedulerTask.put(executorsScheduler.getTaskId(), executorsScheduler);
             callBack.run(executorsScheduler);
         });
+        return new ExecutorsSchedulerTask(plugin, executorService);
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack) {
+        return this.runTask(schedulerType, callBack);
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack) {
+        return this.runTask(schedulerType, callBack);
     }
 
     @Override
-    public void runTask(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired) {
-        throw new UnsupportedOperationException();
+    public @Nullable SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired) {
+        return this.runTask(schedulerType, callBack);
     }
 
     @Override
