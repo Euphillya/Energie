@@ -4,8 +4,6 @@ import fr.euphyllia.energie.executors.ExecutorsScheduler;
 import fr.euphyllia.energie.folia.FoliaScheduler;
 import fr.euphyllia.energie.legacy.LegacyScheduler;
 import fr.euphyllia.energie.model.Scheduler;
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 
 public class Energie {
