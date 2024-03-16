@@ -4,6 +4,8 @@ import fr.euphyllia.energie.executors.ExecutorsScheduler;
 import fr.euphyllia.energie.folia.FoliaScheduler;
 import fr.euphyllia.energie.legacy.LegacyScheduler;
 import fr.euphyllia.energie.model.Scheduler;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 
 public class Energie {
@@ -21,12 +23,11 @@ public class Energie {
     }
 
     public static boolean isFolia() {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
+        return hasClass("io.papermc.paper.threadedregions.RegionizedServer");
+    }
+
+    public static boolean isPaper() {
+        return hasClass("com.destroystokyo.paper.PaperConfig") || hasClass("io.papermc.paper.configuration.Configuration");
     }
 
     public Scheduler getScheduler(SchedulerSoft schedulerSoft) {
@@ -43,5 +44,13 @@ public class Energie {
 
     public enum SchedulerSoft {
         NATIVE, MINECRAFT
+    }
+    private static boolean hasClass(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException exception) {
+            return false;
+        }
     }
 }
