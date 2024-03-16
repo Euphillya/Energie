@@ -9,8 +9,11 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class LegacyScheduler implements Scheduler {
     private final Plugin plugin;
@@ -263,6 +266,11 @@ public class LegacyScheduler implements Scheduler {
     @Override @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, SchedulerCallBack callBack) {
         this.scheduleSyncDelayed(schedulerType, callBack);
+    }
+
+    @Override
+    public List<SchedulerTaskInter> getPendingTasks() {
+        return Bukkit.getScheduler().getPendingTasks().stream().map(LegacySchedulerTask::new).collect(Collectors.toList());
     }
 
     @Override

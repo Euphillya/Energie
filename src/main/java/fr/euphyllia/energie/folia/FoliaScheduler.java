@@ -10,10 +10,13 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class FoliaScheduler implements Scheduler {
 
@@ -469,6 +472,11 @@ public class FoliaScheduler implements Scheduler {
         } else {
             this.execute(schedulerType, chunkOrLocOrEntity, callBack);
         }
+    }
+
+    @Override
+    public List<SchedulerTaskInter> getPendingTasks() {
+        return new ArrayList<>(mapSchedulerTask.values());
     }
 
     @Override

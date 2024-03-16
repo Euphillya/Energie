@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.Future;
 
 public interface Scheduler {
@@ -85,6 +86,7 @@ public interface Scheduler {
     @Deprecated
     void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, SchedulerCallBack callBack);
 
+    List<SchedulerTaskInter> getPendingTasks();
 
     void cancelAllTask();
 

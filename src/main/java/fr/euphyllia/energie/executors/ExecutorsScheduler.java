@@ -7,6 +7,8 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -210,6 +212,11 @@ public class ExecutorsScheduler implements Scheduler {
     @Override @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, SchedulerCallBack callBack) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<SchedulerTaskInter> getPendingTasks() {
+        return new ArrayList<>(mapSchedulerTask.values());
     }
 
     @Override
