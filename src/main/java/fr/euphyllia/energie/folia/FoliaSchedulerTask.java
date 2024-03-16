@@ -8,9 +8,11 @@ import org.jetbrains.annotations.NotNull;
 public class FoliaSchedulerTask implements SchedulerTaskInter {
 
     private final ScheduledTask schedulerTask;
+    private boolean isSynchronous = false;
 
-    public FoliaSchedulerTask(ScheduledTask schedulerTask) {
+    public FoliaSchedulerTask(ScheduledTask schedulerTask, boolean sync) {
         this.schedulerTask = schedulerTask;
+        this.isSynchronous = sync;
     }
 
 
@@ -32,5 +34,10 @@ public class FoliaSchedulerTask implements SchedulerTaskInter {
     @Override
     public int getTaskId() {
         return this.schedulerTask.hashCode();
+    }
+
+    @Override
+    public boolean isSync() {
+        return this.isSynchronous;
     }
 }

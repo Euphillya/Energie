@@ -12,4 +12,6 @@ public interface SchedulerTaskInter {
     void cancel();
 
     int getTaskId();
+
+    boolean isSync();
 }

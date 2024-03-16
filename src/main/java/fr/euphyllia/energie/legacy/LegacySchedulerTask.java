@@ -32,4 +32,9 @@ public class LegacySchedulerTask implements SchedulerTaskInter {
     public int getTaskId() {
         return this.task.getTaskId();
     }
+
+    @Override
+    public boolean isSync() {
+        return this.task.isSync();
+    }
 }

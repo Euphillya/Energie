@@ -35,4 +35,9 @@ public class ExecutorsSchedulerTask implements SchedulerTaskInter {
     public int getTaskId() {
         return this.executors.hashCode();
     }
+
+    @Override
+    public boolean isSync() {
+        return false;
+    }
 }
