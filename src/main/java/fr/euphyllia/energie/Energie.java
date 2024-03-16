@@ -43,6 +43,7 @@ public class Energie {
     public enum SchedulerSoft {
         NATIVE, MINECRAFT
     }
+
     private static boolean hasClass(String className) {
         try {
             Class.forName(className);
