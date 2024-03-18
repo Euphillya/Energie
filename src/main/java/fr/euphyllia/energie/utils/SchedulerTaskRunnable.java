@@ -69,6 +69,7 @@ public abstract class SchedulerTaskRunnable extends AbstractSchedulerTaskRunnabl
     public @NotNull SchedulerTaskInter runDelayed(@NotNull Plugin plugin, SchedulerType schedulerType, long delay) throws IllegalArgumentException, IllegalStateException {
         checkNotYetScheduled();
         if (Energie.isFolia()) {
+            delay = Math.max(1, delay);
             if (schedulerType.equals(SchedulerType.ASYNC)) {
                 return setupTask(new FoliaSchedulerTask(Bukkit.getAsyncScheduler().runDelayed(plugin, task1 -> this.run(), delay * 50, TimeUnit.MILLISECONDS), false));
             } else {
@@ -89,6 +90,7 @@ public abstract class SchedulerTaskRunnable extends AbstractSchedulerTaskRunnabl
             return runTask(plugin, schedulerType);
         }
         checkNotYetScheduled();
+        delayTicks = Math.max(1, delayTicks);
         return setupTask(new FoliaSchedulerTask(Bukkit.getRegionScheduler().runDelayed(plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), task1 -> this.run(), delayTicks), true));
     }
 
@@ -98,6 +100,7 @@ public abstract class SchedulerTaskRunnable extends AbstractSchedulerTaskRunnabl
             return runTask(plugin, schedulerType);
         }
         checkNotYetScheduled();
+        delayTicks = Math.max(1, delayTicks);
         return setupTask(new FoliaSchedulerTask(Bukkit.getRegionScheduler().runDelayed(plugin, location, task1 -> this.run(), delayTicks), true));
     }
 
@@ -108,6 +111,7 @@ public abstract class SchedulerTaskRunnable extends AbstractSchedulerTaskRunnabl
             return runTask(plugin, schedulerType);
         }
         checkNotYetScheduled();
+        delayTicks = Math.max(1, delayTicks);
         return setupTask(new FoliaSchedulerTask(entity.getScheduler().runDelayed(plugin, task1 -> this.run(), retired, delayTicks), true));
     }
 
@@ -115,6 +119,8 @@ public abstract class SchedulerTaskRunnable extends AbstractSchedulerTaskRunnabl
     public @NotNull SchedulerTaskInter runAtFixedRate(@NotNull Plugin plugin, SchedulerType schedulerType, long delay, long period) throws IllegalArgumentException, IllegalStateException {
         checkNotYetScheduled();
         if (Energie.isFolia()) {
+            delay = Math.max(1, delay);
+            period = Math.max(1, period);
             if (schedulerType.equals(SchedulerType.ASYNC)) {
                 return setupTask(new FoliaSchedulerTask(Bukkit.getAsyncScheduler().runAtFixedRate(plugin, task1 -> this.run(), delay * 50, period * 50, TimeUnit.MILLISECONDS), false));
             } else {
@@ -130,30 +136,36 @@ public abstract class SchedulerTaskRunnable extends AbstractSchedulerTaskRunnabl
     }
 
     @Override
-    public @NotNull SchedulerTaskInter runAtFixedRate(@NotNull Plugin plugin, @NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, long initialDelayTicks, long periodTicks) {
+    public @NotNull SchedulerTaskInter runAtFixedRate(@NotNull Plugin plugin, @NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, long delay, long period) {
         if (!Energie.isFolia() || schedulerType.equals(SchedulerType.ASYNC)) {
             return runTask(plugin, schedulerType);
         }
         checkNotYetScheduled();
-        return setupTask(new FoliaSchedulerTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), task1 -> this.run(), initialDelayTicks, periodTicks), true));
+        delay = Math.max(1, delay);
+        period = Math.max(1, period);
+        return setupTask(new FoliaSchedulerTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), task1 -> this.run(), delay, period), true));
     }
 
     @Override
-    public @NotNull SchedulerTaskInter runAtFixedRate(@NotNull Plugin plugin, @NotNull SchedulerType schedulerType, Location location, long initialDelayTicks, long periodTicks) {
+    public @NotNull SchedulerTaskInter runAtFixedRate(@NotNull Plugin plugin, @NotNull SchedulerType schedulerType, Location location, long delay, long period) {
         if (!Energie.isFolia() || schedulerType.equals(SchedulerType.ASYNC)) {
             return runTask(plugin, schedulerType);
         }
         checkNotYetScheduled();
-        return setupTask(new FoliaSchedulerTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, task1 -> this.run(), initialDelayTicks, periodTicks), true));
+        delay = Math.max(1, delay);
+        period = Math.max(1, period);
+        return setupTask(new FoliaSchedulerTask(Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, task1 -> this.run(), delay, period), true));
     }
 
     @Override
-    public @NotNull SchedulerTaskInter runAtFixedRate(@NotNull Plugin plugin, @NotNull SchedulerType schedulerType, Entity entity, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
+    public @NotNull SchedulerTaskInter runAtFixedRate(@NotNull Plugin plugin, @NotNull SchedulerType schedulerType, Entity entity, @Nullable Runnable retired, long delay, long period) {
         checkNotYetScheduled();
         if (!Energie.isFolia() || schedulerType.equals(SchedulerType.ASYNC)) {
             return runTask(plugin, schedulerType);
         }
         checkNotYetScheduled();
-        return setupTask(new FoliaSchedulerTask(entity.getScheduler().runAtFixedRate(plugin, task1 -> this.run(), retired, initialDelayTicks, periodTicks), true));
+        delay = Math.max(1, delay);
+        period = Math.max(1, period);
+        return setupTask(new FoliaSchedulerTask(entity.getScheduler().runAtFixedRate(plugin, task1 -> this.run(), retired, delay, period), true));
     }
 }

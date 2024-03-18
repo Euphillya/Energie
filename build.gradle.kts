@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "fr.euphyllia"
-version = "1.1.8"
+version = "1.1.9"
 
 repositories {
     mavenCentral()
