@@ -1,6 +1,7 @@
 ## API
 
 Bukkit/Spigot/Paper :
+
 ```java
 // Example Scheduler
 Bukkit.getScheduler().runTask(this.plugin, () -> {
@@ -9,6 +10,7 @@ Bukkit.getScheduler().runTask(this.plugin, () -> {
 ```
 
 Folia :
+
 ```java
 // Example Scheduler 
 Bukkit.getGlobalRegionScheduler().run(this.plugin, task -> {
@@ -21,7 +23,9 @@ Entity.getScheduler().run(this.plugin, task -> {
     // code                
 }, retired);
 ```
+
 Energie :
+
 ```java
 Energie energie = new Energie(this.plugin);
 
