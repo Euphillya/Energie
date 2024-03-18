@@ -7,6 +7,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -400,11 +401,12 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
-        if (chunkOrLoc instanceof Location location) {
-            this.runAtFixedRate(schedulerType, location, callBack, initialDelayTicks, periodTicks);
-        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk worldChunk) {
-            this.runAtFixedRate(schedulerType, worldChunk, callBack, initialDelayTicks, periodTicks);
-        } else if (chunkOrLoc instanceof Chunk chunk) {
+        if (chunkOrLoc instanceof Location) {
+            this.runAtFixedRate(schedulerType, (Location) chunkOrLoc, callBack, initialDelayTicks, periodTicks);
+        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk) {
+            this.runAtFixedRate(schedulerType, (MultipleRecords.WorldChunk) chunkOrLoc, callBack, initialDelayTicks, periodTicks);
+        } else if (chunkOrLoc instanceof Chunk) {
+            Chunk chunk = (Chunk) chunkOrLoc;
             MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
             this.runAtFixedRate(schedulerType, worldChunk, callBack, initialDelayTicks, periodTicks);
         } else {
@@ -414,7 +416,8 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
-        if (chunkOrLocOrEntity instanceof Entity entity) {
+        if (chunkOrLocOrEntity instanceof Entity) {
+            Entity entity = (Entity) chunkOrLocOrEntity;
             this.runAtFixedRate(schedulerType, entity, callBack, retired, initialDelayTicks, periodTicks);
         } else {
             this.runAtFixedRate(schedulerType, chunkOrLocOrEntity, initialDelayTicks, periodTicks, callBack);
@@ -428,11 +431,12 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long delayTicks, SchedulerCallBack callBack) {
-        if (chunkOrLoc instanceof Location location) {
-            this.runDelayed(schedulerType, location, callBack, delayTicks);
-        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk worldChunk) {
-            this.runDelayed(schedulerType, worldChunk, callBack, delayTicks);
-        } else if (chunkOrLoc instanceof Chunk chunk) {
+        if (chunkOrLoc instanceof Location) {
+            this.runDelayed(schedulerType, (Location) chunkOrLoc, callBack, delayTicks);
+        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk) {
+            this.runDelayed(schedulerType, (MultipleRecords.WorldChunk) chunkOrLoc, callBack, delayTicks);
+        } else if (chunkOrLoc instanceof Chunk) {
+            Chunk chunk = (Chunk) chunkOrLoc;
             MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
             this.runDelayed(schedulerType, worldChunk, callBack, delayTicks);
         } else {
@@ -442,8 +446,8 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long delayTicks, SchedulerCallBack callBack) {
-        if (chunkOrLocOrEntity instanceof Entity entity) {
-            this.runDelayed(schedulerType, entity, callBack, retired, delayTicks);
+        if (chunkOrLocOrEntity instanceof Entity) {
+            this.runDelayed(schedulerType, (Entity) chunkOrLocOrEntity, callBack, retired, delayTicks);
         } else {
             this.runDelayed(schedulerType, chunkOrLocOrEntity, delayTicks, callBack);
         }
@@ -456,11 +460,12 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, SchedulerCallBack callBack) {
-        if (chunkOrLoc instanceof Location location) {
-            this.scheduleSyncDelayed(schedulerType, location, callBack);
-        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk worldChunk) {
-            this.scheduleSyncDelayed(schedulerType, worldChunk, callBack);
-        } else if (chunkOrLoc instanceof Chunk chunk) {
+        if (chunkOrLoc instanceof Location) {
+            this.scheduleSyncDelayed(schedulerType, (Location) chunkOrLoc, callBack);
+        } else if (chunkOrLoc instanceof MultipleRecords.WorldChunk) {
+            this.scheduleSyncDelayed(schedulerType, (MultipleRecords.WorldChunk) chunkOrLoc, callBack);
+        } else if (chunkOrLoc instanceof Chunk) {
+            Chunk chunk = (Chunk) chunkOrLoc;
             MultipleRecords.WorldChunk worldChunk = new MultipleRecords.WorldChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
             this.scheduleSyncDelayed(schedulerType, worldChunk, callBack);
         } else {
@@ -470,8 +475,8 @@ public class FoliaScheduler implements Scheduler {
 
     @Override @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, SchedulerCallBack callBack) {
-        if (chunkOrLocOrEntity instanceof Entity entity) {
-            this.execute(schedulerType, entity, retired, callBack);
+        if (chunkOrLocOrEntity instanceof Entity) {
+            this.execute(schedulerType, (Entity) chunkOrLocOrEntity, retired, callBack);
         } else {
             this.execute(schedulerType, chunkOrLocOrEntity, callBack);
         }
