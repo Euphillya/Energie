@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ExecutorsScheduler implements Scheduler {
 
@@ -28,17 +29,33 @@ public class ExecutorsScheduler implements Scheduler {
     }
 
     @Override
-    public @Nullable SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
+    public SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
         if (!schedulerType.equals(SchedulerType.ASYNC)) {
             throw new UnsupportedOperationException();
         }
+        final AtomicReference<ExecutorsSchedulerTask> executorsSchedulerTaskRef = new AtomicReference<>();
+
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(() -> {
-            ExecutorsSchedulerTask executorsScheduler = new ExecutorsSchedulerTask(plugin, executorService);
+
+        TaskRunnable taskRunnable = (executorsScheduler) -> {
             mapSchedulerTask.put(executorsScheduler.getTaskId(), executorsScheduler);
             callBack.run(executorsScheduler);
+        };
+
+        executorsSchedulerTaskRef.set(new ExecutorsSchedulerTask(this.plugin, executorService));
+
+        executorService.scheduleAtFixedRate(() -> {
+            taskRunnable.run(executorsSchedulerTaskRef.get());
         }, initialDelayTicks * 50, periodTicks * 50, TimeUnit.MILLISECONDS);
-        return new ExecutorsSchedulerTask(plugin, executorService);
+
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(60, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        return executorsSchedulerTaskRef.get();
     }
 
     @Override
@@ -61,13 +78,29 @@ public class ExecutorsScheduler implements Scheduler {
         if (!schedulerType.equals(SchedulerType.ASYNC)) {
             throw new UnsupportedOperationException();
         }
+        final AtomicReference<ExecutorsSchedulerTask> executorsSchedulerTaskRef = new AtomicReference<>();
+
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.schedule(() -> {
-            ExecutorsSchedulerTask executorsScheduler = new ExecutorsSchedulerTask(plugin, executorService);
+
+        TaskRunnable taskRunnable = (executorsScheduler) -> {
             mapSchedulerTask.put(executorsScheduler.getTaskId(), executorsScheduler);
             callBack.run(executorsScheduler);
+        };
+
+        executorsSchedulerTaskRef.set(new ExecutorsSchedulerTask(this.plugin, executorService));
+
+        executorService.schedule(() -> {
+            taskRunnable.run(executorsSchedulerTaskRef.get());
         }, delayTicks * 50, TimeUnit.MILLISECONDS);
-        return new ExecutorsSchedulerTask(plugin, executorService);
+
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(60, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        return executorsSchedulerTaskRef.get();
     }
 
     @Override
@@ -90,13 +123,29 @@ public class ExecutorsScheduler implements Scheduler {
         if (!schedulerType.equals(SchedulerType.ASYNC)) {
             throw new UnsupportedOperationException();
         }
+        final AtomicReference<ExecutorsSchedulerTask> executorsSchedulerTaskRef = new AtomicReference<>();
+
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.execute(() -> {
-            ExecutorsSchedulerTask executorsScheduler = new ExecutorsSchedulerTask(plugin, executorService);
+
+        TaskRunnable taskRunnable = (executorsScheduler) -> {
             mapSchedulerTask.put(executorsScheduler.getTaskId(), executorsScheduler);
             callBack.run(executorsScheduler);
+        };
+
+        executorsSchedulerTaskRef.set(new ExecutorsSchedulerTask(this.plugin, executorService));
+
+        executorService.execute(() -> {
+            taskRunnable.run(executorsSchedulerTaskRef.get());
         });
-        return new ExecutorsSchedulerTask(plugin, executorService);
+
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(60, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        return executorsSchedulerTaskRef.get();
     }
 
     @Override
@@ -169,47 +218,56 @@ public class ExecutorsScheduler implements Scheduler {
         throw new UnsupportedOperationException();
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
         this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
         throw new UnsupportedOperationException();
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
         throw new UnsupportedOperationException();
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void runDelayed(@NotNull SchedulerType schedulerType, long delayTicks, SchedulerCallBack callBack) {
         this.runDelayed(schedulerType, callBack, delayTicks);
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long delayTicks, SchedulerCallBack callBack) {
         throw new UnsupportedOperationException();
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long delayTicks, SchedulerCallBack callBack) {
         throw new UnsupportedOperationException();
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
         this.runTask(schedulerType, callBack);
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, SchedulerCallBack callBack) {
         throw new UnsupportedOperationException();
     }
 
-    @Override @Deprecated
+    @Override
+    @Deprecated
     public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, SchedulerCallBack callBack) {
         throw new UnsupportedOperationException();
     }

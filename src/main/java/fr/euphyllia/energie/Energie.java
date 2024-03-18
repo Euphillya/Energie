@@ -8,16 +8,14 @@ import org.bukkit.plugin.Plugin;
 
 public class Energie {
 
-    private final Plugin plugin;
     private final ExecutorsScheduler executorsScheduler;
     private final LegacyScheduler legacyScheduler;
     private final FoliaScheduler foliaScheduler;
 
     public Energie(Plugin javaPlugin) {
-        this.plugin = javaPlugin;
-        this.executorsScheduler = new ExecutorsScheduler(this.plugin);
-        this.legacyScheduler = new LegacyScheduler(this.plugin);
-        this.foliaScheduler = new FoliaScheduler(this.plugin);
+        this.executorsScheduler = new ExecutorsScheduler(javaPlugin);
+        this.legacyScheduler = new LegacyScheduler(javaPlugin);
+        this.foliaScheduler = new FoliaScheduler(javaPlugin);
     }
 
     public static boolean isFolia() {
@@ -28,22 +26,6 @@ public class Energie {
         return hasClass("com.destroystokyo.paper.PaperConfig") || hasClass("io.papermc.paper.configuration.Configuration");
     }
 
-    public Scheduler getScheduler(SchedulerSoft schedulerSoft) {
-        if (schedulerSoft == SchedulerSoft.NATIVE) {
-            return this.executorsScheduler;
-        } else if (schedulerSoft == SchedulerSoft.MINECRAFT) {
-            if (isFolia()) {
-                return this.foliaScheduler;
-            }
-            return this.legacyScheduler;
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    public enum SchedulerSoft {
-        NATIVE, MINECRAFT
-    }
-
     private static boolean hasClass(String className) {
         try {
             Class.forName(className);
@@ -51,5 +33,31 @@ public class Energie {
         } catch (ClassNotFoundException exception) {
             return false;
         }
+    }
+
+    public Scheduler getNativeScheduler() {
+        return this.executorsScheduler;
+    }
+
+    public Scheduler getMinecraftScheduler() {
+        if (isFolia()) {
+            return this.foliaScheduler;
+        }
+        return this.legacyScheduler;
+    }
+
+    @Deprecated
+    public Scheduler getScheduler(SchedulerSoft schedulerSoft) {
+        if (schedulerSoft == SchedulerSoft.NATIVE) {
+            return this.getNativeScheduler();
+        } else if (schedulerSoft == SchedulerSoft.MINECRAFT) {
+            return this.getMinecraftScheduler();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    @Deprecated
+    public enum SchedulerSoft {
+        NATIVE, MINECRAFT
     }
 }
