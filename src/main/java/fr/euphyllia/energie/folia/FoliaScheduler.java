@@ -40,7 +40,7 @@ public class FoliaScheduler implements Scheduler {
         initialDelayTicks = Math.max(1, initialDelayTicks);
         periodTicks = Math.max(1, periodTicks);
 
-        SchedulerTaskInter inter;
+        FoliaSchedulerTask inter;
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             inter = new FoliaSchedulerTask(null, false);
             ScheduledTask interTask = Bukkit.getAsyncScheduler().runAtFixedRate(this.plugin, task -> {
@@ -67,7 +67,7 @@ public class FoliaScheduler implements Scheduler {
             initialDelayTicks = Math.max(1, initialDelayTicks);
             periodTicks = Math.max(1, periodTicks);
 
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().runAtFixedRate(this.plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
@@ -85,7 +85,7 @@ public class FoliaScheduler implements Scheduler {
             initialDelayTicks = Math.max(1, initialDelayTicks);
             periodTicks = Math.max(1, periodTicks);
 
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().runAtFixedRate(this.plugin, location, task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
@@ -102,8 +102,8 @@ public class FoliaScheduler implements Scheduler {
         } else {
             initialDelayTicks = Math.max(1, initialDelayTicks);
             periodTicks = Math.max(1, periodTicks);
-            
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = entity.getScheduler().runAtFixedRate(this.plugin, task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
@@ -117,7 +117,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delayTicks) {
         delayTicks = Math.max(1, delayTicks);
 
-        SchedulerTaskInter inter;
+        FoliaSchedulerTask inter;
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             inter = new FoliaSchedulerTask(null, false);
             ScheduledTask interTask = Bukkit.getAsyncScheduler().runDelayed(this.plugin, task -> {
@@ -143,7 +143,7 @@ public class FoliaScheduler implements Scheduler {
         } else {
             delayTicks = Math.max(1, delayTicks);
 
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().runDelayed(this.plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
@@ -160,7 +160,7 @@ public class FoliaScheduler implements Scheduler {
         } else {
             delayTicks = Math.max(1, delayTicks);
 
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().runDelayed(this.plugin, location, task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
@@ -177,24 +177,19 @@ public class FoliaScheduler implements Scheduler {
         } else {
             delayTicks = Math.max(1, delayTicks);
 
-            final AtomicReference<FoliaSchedulerTask> foliaSchedulerTaskRef = new AtomicReference<>();
-
-            TaskRunnable taskRunnable = (task) -> {
-                mapSchedulerTask.put(task.getTaskId(), task);
-                callBack.run(task);
-            };
-            foliaSchedulerTaskRef.set(new FoliaSchedulerTask(
-                    entity.getScheduler().runDelayed(this.plugin, task -> taskRunnable.run(foliaSchedulerTaskRef.get()), retired, delayTicks),
-                    true
-            ));
-
-            return foliaSchedulerTaskRef.get();
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
+            ScheduledTask interTask = entity.getScheduler().runDelayed(this.plugin, task -> {
+                mapSchedulerTask.put(task.hashCode(), inter);
+                callBack.run(inter);
+            }, retired, delayTicks);
+            inter.setSchedulerTask(interTask);
+            return inter;
         }
     }
 
     @Override
     public SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
-        SchedulerTaskInter inter;
+        FoliaSchedulerTask inter;
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             inter = new FoliaSchedulerTask(null, false);
             ScheduledTask interTask = Bukkit.getAsyncScheduler().runNow(this.plugin, task -> {
@@ -218,7 +213,7 @@ public class FoliaScheduler implements Scheduler {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runTask(schedulerType, callBack);
         } else {
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().run(this.plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
@@ -233,7 +228,7 @@ public class FoliaScheduler implements Scheduler {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runTask(schedulerType, callBack);
         } else {
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().run(this.plugin, location, task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
@@ -248,7 +243,7 @@ public class FoliaScheduler implements Scheduler {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runTask(schedulerType, callBack);
         } else {
-            SchedulerTaskInter inter = new FoliaSchedulerTask(null, true);
+            FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = entity.getScheduler().run(this.plugin, task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);

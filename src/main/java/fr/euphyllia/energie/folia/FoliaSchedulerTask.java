@@ -42,7 +42,6 @@ public class FoliaSchedulerTask implements SchedulerTaskInter {
         return this.isSynchronous;
     }
 
-    @Override
     public void setSchedulerTask(@Nullable ScheduledTask schedulerTask) {
         this.schedulerTask = schedulerTask;
     }
