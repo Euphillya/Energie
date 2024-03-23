@@ -48,13 +48,15 @@ public class FoliaScheduler implements Scheduler {
                 callBack.run(inter);
             }, initialDelayTicks * 50, periodTicks * 50, TimeUnit.MILLISECONDS);
             inter.setSchedulerTask(interTask);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(this.plugin,  task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
             }, initialDelayTicks, periodTicks);
             inter.setSchedulerTask(interTask);
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
         return inter;
     }
@@ -63,7 +65,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             initialDelayTicks = Math.max(1, initialDelayTicks);
             periodTicks = Math.max(1, periodTicks);
 
@@ -74,6 +76,8 @@ public class FoliaScheduler implements Scheduler {
             }, initialDelayTicks, periodTicks);
             inter.setSchedulerTask(interTask);
             return inter;
+        }  else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -81,7 +85,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long initialDelayTicks, long periodTicks) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             initialDelayTicks = Math.max(1, initialDelayTicks);
             periodTicks = Math.max(1, periodTicks);
 
@@ -92,6 +96,8 @@ public class FoliaScheduler implements Scheduler {
             }, initialDelayTicks, periodTicks);
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -99,7 +105,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runAtFixedRate(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long initialDelayTicks, long periodTicks) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             initialDelayTicks = Math.max(1, initialDelayTicks);
             periodTicks = Math.max(1, periodTicks);
 
@@ -110,6 +116,8 @@ public class FoliaScheduler implements Scheduler {
             }, retired, initialDelayTicks, periodTicks);
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -125,13 +133,15 @@ public class FoliaScheduler implements Scheduler {
                 callBack.run(inter);
             }, delayTicks * 50, TimeUnit.MILLISECONDS);
             inter.setSchedulerTask(interTask);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getGlobalRegionScheduler().runDelayed(this.plugin,  task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
             }, delayTicks);
             inter.setSchedulerTask(interTask);
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
         return inter;
     }
@@ -140,7 +150,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack, long delayTicks) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runDelayed(schedulerType, callBack, delayTicks);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             delayTicks = Math.max(1, delayTicks);
 
             FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
@@ -150,6 +160,8 @@ public class FoliaScheduler implements Scheduler {
             }, delayTicks);
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -157,7 +169,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack, long delayTicks) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runDelayed(schedulerType, callBack, delayTicks);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             delayTicks = Math.max(1, delayTicks);
 
             FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
@@ -167,6 +179,8 @@ public class FoliaScheduler implements Scheduler {
             }, delayTicks);
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -174,7 +188,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runDelayed(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delayTicks) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runDelayed(schedulerType, callBack, delayTicks);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             delayTicks = Math.max(1, delayTicks);
 
             FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
@@ -184,6 +198,8 @@ public class FoliaScheduler implements Scheduler {
             }, retired, delayTicks);
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -197,13 +213,15 @@ public class FoliaScheduler implements Scheduler {
                 callBack.run(inter);
             });
             inter.setSchedulerTask(interTask);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getGlobalRegionScheduler().run(this.plugin,  task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
                 callBack.run(inter);
             });
             inter.setSchedulerTask(interTask);
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
         return inter;
     }
@@ -212,7 +230,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, MultipleRecords.WorldChunk worldChunk, SchedulerCallBack callBack) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runTask(schedulerType, callBack);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().run(this.plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
@@ -220,6 +238,8 @@ public class FoliaScheduler implements Scheduler {
             });
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -227,7 +247,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, Location location, SchedulerCallBack callBack) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runTask(schedulerType, callBack);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = Bukkit.getRegionScheduler().run(this.plugin, location, task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
@@ -235,6 +255,8 @@ public class FoliaScheduler implements Scheduler {
             });
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -242,7 +264,7 @@ public class FoliaScheduler implements Scheduler {
     public SchedulerTaskInter runTask(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return this.runTask(schedulerType, callBack);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             FoliaSchedulerTask inter = new FoliaSchedulerTask(null, true);
             ScheduledTask interTask = entity.getScheduler().run(this.plugin, task -> {
                 mapSchedulerTask.put(task.hashCode(), inter);
@@ -250,6 +272,8 @@ public class FoliaScheduler implements Scheduler {
             }, retired);
             inter.setSchedulerTask(interTask);
             return inter;
+        } else  {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -258,8 +282,10 @@ public class FoliaScheduler implements Scheduler {
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
                 return this.runTask(schedulerType, callBack).getTaskId();
-            } else {
+            } else if (schedulerType.equals(SchedulerType.SYNC)) {
                 Bukkit.getGlobalRegionScheduler().execute(this.plugin, () -> callBack.run(null));
+            } else {
+                return -1;
             }
             return 0;
         } catch (Exception ignored) {
@@ -272,8 +298,10 @@ public class FoliaScheduler implements Scheduler {
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
                 return this.runTask(schedulerType, worldChunk, callBack).getTaskId();
-            } else {
+            } else if (schedulerType.equals(SchedulerType.SYNC)) {
                 Bukkit.getRegionScheduler().execute(this.plugin, worldChunk.world(), worldChunk.chunkX(), worldChunk.chunkZ(), () -> callBack.run(null));
+            } else {
+                return -1;
             }
             return 0;
         } catch (Exception ignored) {
@@ -286,8 +314,10 @@ public class FoliaScheduler implements Scheduler {
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
                 return this.runTask(schedulerType, location, callBack).getTaskId();
-            } else {
+            } else if (schedulerType.equals(SchedulerType.SYNC)) {
                 Bukkit.getRegionScheduler().execute(this.plugin, location, () -> callBack.run(null));
+            } else {
+                return -1;
             }
             return 0;
         } catch (Exception ignored) {
@@ -327,8 +357,10 @@ public class FoliaScheduler implements Scheduler {
         try {
             if (schedulerType.equals(SchedulerType.ASYNC)) {
                 return this.runDelayed(schedulerType, entity, callBack, retired, delay).getTaskId();
-            } else {
+            } else if (schedulerType.equals(SchedulerType.SYNC)) {
                 entity.getScheduler().execute(this.plugin, () -> callBack.run(null), retired, delay);
+            } else {
+                return -1;
             }
             return 0;
         } catch (Exception ignored) {
