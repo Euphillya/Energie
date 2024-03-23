@@ -35,8 +35,10 @@ public class LegacyScheduler implements Scheduler {
 
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             schedulerTaskRef.set(new LegacySchedulerTask(Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, taskRunnable, initialDelayTicks, periodTicks)));
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             schedulerTaskRef.set(new LegacySchedulerTask(Bukkit.getScheduler().runTaskTimer(this.plugin, taskRunnable, initialDelayTicks, periodTicks)));
+        } else {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
 
         return schedulerTaskRef.get();
@@ -64,8 +66,10 @@ public class LegacyScheduler implements Scheduler {
 
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             schedulerTaskRef.set(new LegacySchedulerTask(Bukkit.getScheduler().runTaskLaterAsynchronously(this.plugin, taskRunnable, delayTicks)));
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             schedulerTaskRef.set(new LegacySchedulerTask(Bukkit.getScheduler().runTaskLater(this.plugin, taskRunnable, delayTicks)));
+        } else {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
 
         return schedulerTaskRef.get();
@@ -93,8 +97,10 @@ public class LegacyScheduler implements Scheduler {
 
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             schedulerTaskRef.set(new LegacySchedulerTask(Bukkit.getScheduler().runTaskAsynchronously(this.plugin, taskRunnable)));
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             schedulerTaskRef.set(new LegacySchedulerTask(Bukkit.getScheduler().runTask(this.plugin, taskRunnable)));
+        } else {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
 
         return schedulerTaskRef.get();
@@ -119,8 +125,10 @@ public class LegacyScheduler implements Scheduler {
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return Bukkit.getScheduler().scheduleAsyncDelayedTask(this.plugin, () -> callBack.run(null));
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             return Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> callBack.run(null));
+        } else {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -138,8 +146,10 @@ public class LegacyScheduler implements Scheduler {
     public int scheduleSyncDelayed(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delay) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return Bukkit.getScheduler().scheduleAsyncDelayedTask(this.plugin, () -> callBack.run(null), delay);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             return Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> callBack.run(null), delay);
+        } else {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
@@ -162,8 +172,10 @@ public class LegacyScheduler implements Scheduler {
     public int scheduleSyncRepeating(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack, long delay, long period) {
         if (schedulerType.equals(SchedulerType.ASYNC)) {
             return Bukkit.getScheduler().scheduleAsyncRepeatingTask(this.plugin, () -> callBack.run(null), delay, period);
-        } else {
+        } else if (schedulerType.equals(SchedulerType.SYNC)) {
             return Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> callBack.run(null), delay, period);
+        } else {
+            throw new UnsupportedOperationException("SchedulerType not supported");
         }
     }
 
