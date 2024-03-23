@@ -45,19 +45,4 @@ public class Energie {
         }
         return this.legacyScheduler;
     }
-
-    @Deprecated
-    public Scheduler getScheduler(SchedulerSoft schedulerSoft) {
-        if (schedulerSoft == SchedulerSoft.NATIVE) {
-            return this.getNativeScheduler();
-        } else if (schedulerSoft == SchedulerSoft.MINECRAFT) {
-            return this.getMinecraftScheduler();
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    @Deprecated
-    public enum SchedulerSoft {
-        NATIVE, MINECRAFT
-    }
 }
