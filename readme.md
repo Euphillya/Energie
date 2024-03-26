@@ -1,6 +1,12 @@
 ## What is Energie ?
 Energie is a library allowing you to maintain compatibility between Spigot and Folia. The library is still under development, but can be used.
 
+## Lists of plugins that officially use Energie
+
+| Name    | Github                                         | Download                                                               |
+|---------|------------------------------------------------|------------------------------------------------------------------------|
+| Skyllia | [Github](https://github.com/Euphillya/Skyllia) | [Modrinth](https://modrinth.com/plugin/skyllia/versions#all-versions)  |
+
 ## Setup
 ```kotlin
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
