@@ -59,33 +59,6 @@ public interface Scheduler {
 
     int scheduleSyncRepeating(@NotNull SchedulerType schedulerType, Entity entity, SchedulerCallBack callBack, @Nullable Runnable retired, long delay, long period);
 
-    @Deprecated
-    void runAtFixedRate(@NotNull SchedulerType schedulerType, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack);
-
-    @Deprecated
-    void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack);
-
-    @Deprecated
-    void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack);
-
-    @Deprecated
-    void runDelayed(@NotNull SchedulerType schedulerType, long delayTicks, SchedulerCallBack callBack);
-
-    @Deprecated
-    void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long delayTicks, SchedulerCallBack callBack);
-
-    @Deprecated
-    void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long delayTicks, SchedulerCallBack callBack);
-
-    @Deprecated
-    void execute(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack);
-
-    @Deprecated
-    void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, SchedulerCallBack callBack);
-
-    @Deprecated
-    void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, SchedulerCallBack callBack);
-
     List<SchedulerTaskInter> getPendingTasks();
 
     void cancelAllTask();

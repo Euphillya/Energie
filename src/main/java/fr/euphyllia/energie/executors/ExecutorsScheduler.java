@@ -219,60 +219,6 @@ public class ExecutorsScheduler implements Scheduler {
     }
 
     @Override
-    @Deprecated
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
-        this.runAtFixedRate(schedulerType, callBack, initialDelayTicks, periodTicks);
-    }
-
-    @Override
-    @Deprecated
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public void runAtFixedRate(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long initialDelayTicks, long periodTicks, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public void runDelayed(@NotNull SchedulerType schedulerType, long delayTicks, SchedulerCallBack callBack) {
-        this.runDelayed(schedulerType, callBack, delayTicks);
-    }
-
-    @Override
-    @Deprecated
-    public void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, long delayTicks, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public void runDelayed(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, long delayTicks, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public void execute(@NotNull SchedulerType schedulerType, SchedulerCallBack callBack) {
-        this.runTask(schedulerType, callBack);
-    }
-
-    @Override
-    @Deprecated
-    public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLoc, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public void execute(@NotNull SchedulerType schedulerType, @Nullable Object chunkOrLocOrEntity, @Nullable Runnable retired, SchedulerCallBack callBack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<SchedulerTaskInter> getPendingTasks() {
         return new ArrayList<>(mapSchedulerTask.values());
     }

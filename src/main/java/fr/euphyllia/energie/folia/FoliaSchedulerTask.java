@@ -4,10 +4,11 @@ import fr.euphyllia.energie.model.SchedulerTaskInter;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FoliaSchedulerTask implements SchedulerTaskInter {
 
-    private final ScheduledTask schedulerTask;
+    private ScheduledTask schedulerTask;
     private boolean isSynchronous = false;
 
     public FoliaSchedulerTask(ScheduledTask schedulerTask, boolean sync) {
@@ -39,5 +40,9 @@ public class FoliaSchedulerTask implements SchedulerTaskInter {
     @Override
     public boolean isSync() {
         return this.isSynchronous;
+    }
+
+    public void setSchedulerTask(@Nullable ScheduledTask schedulerTask) {
+        this.schedulerTask = schedulerTask;
     }
 }
